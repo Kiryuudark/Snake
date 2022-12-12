@@ -16,7 +16,7 @@ int main() {
     getmaxyx(stdscr, altura, comprimento);
     int hAltura = altura/2, hComprimento = comprimento/2;
     bool isPressed = false;
-    int a=0;
+    int dir;
 
     //using keypad is possible get direcional keys
     keypad(stdscr, TRUE);
@@ -27,19 +27,21 @@ int main() {
         // 4 - LEFT ; 5 - RIGHT ; 2 - DOWN ; 3 - UP
         if ((mv == 4 || mv == 5 || mv == 2 || mv == 3) && !isPressed){
             isPressed=true;
-            mvprintw(hAltura, hComprimento, " true ");
+            
         }
-        else {
-            mvprintw(hAltura+a-1, hComprimento, "     ");
-            mvprintw(hAltura+a, hComprimento, "false");
-            if (isPressed){
-                a++;
-            }
-        }
+            if (mv == 4) {dir = 4;} // LEFT
+            else if (mv == 5) {dir = 3;} // RIGHT
+            else if (mv == 2) {dir = 1;}
+            else if (mv == 3) {dir = 2;}
+            
+            if (isPressed && dir == 1) { hAltura ++; mvprintw(hAltura-1, hComprimento, "         "); mvprintw(hAltura, hComprimento, "false"); }
+            else if (isPressed && dir == 2) { hAltura --; mvprintw(hAltura+1, hComprimento, "         "); mvprintw(hAltura, hComprimento, "false");}
+            else if (isPressed && dir == 3) { hComprimento ++; mvprintw(hAltura, hComprimento-1, "         "); mvprintw(hAltura, hComprimento, "false");}
+            else if (isPressed && dir == 4) { hComprimento --; mvprintw(hAltura, hComprimento+1, "         "); mvprintw(hAltura, hComprimento, "false");}
         refresh();
 
 
-        napms(500);
+        napms(800);
     }
     
 
