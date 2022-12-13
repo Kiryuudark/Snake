@@ -1,5 +1,6 @@
 #include <iostream>
-#include <curses.h>
+#include <curses.h> // manipulação de tela, 
+#include <cstdlib> // para a função rand();
 
 using namespace std;
 
@@ -17,6 +18,8 @@ int main() {
     int hAltura = altura/2, hComprimento = comprimento/2;
     bool isPressed = false;
     int dir;
+    int premioX, premioY;
+    int score=0, cont=0;
 
     //using keypad is possible get direcional keys
     keypad(stdscr, TRUE);
@@ -29,22 +32,25 @@ int main() {
             isPressed=true;
             
         }
-            if (mv == 4) {dir = 4;} // LEFT
-            else if (mv == 5) {dir = 3;} // RIGHT
-            else if (mv == 2) {dir = 1;}
-            else if (mv == 3) {dir = 2;}
-            
-            if (isPressed && dir == 1) { hAltura ++; mvprintw(hAltura-1, hComprimento, "         "); mvprintw(hAltura, hComprimento, "false"); }
-            else if (isPressed && dir == 2) { hAltura --; mvprintw(hAltura+1, hComprimento, "         "); mvprintw(hAltura, hComprimento, "false");}
-            else if (isPressed && dir == 3) { hComprimento ++; mvprintw(hAltura, hComprimento-1, "         "); mvprintw(hAltura, hComprimento, "false");}
-            else if (isPressed && dir == 4) { hComprimento --; mvprintw(hAltura, hComprimento+1, "         "); mvprintw(hAltura, hComprimento, "false");}
+        if (mv == 4) {dir = 4;} // LEFT
+        else if (mv == 5) {dir = 3;} // RIGHT
+        else if (mv == 2) {dir = 1;} // DOWN
+        else if (mv == 3) {dir = 2;} // UP
+        
+        if (isPressed && dir == 1) { hAltura ++; mvprintw(hAltura-1, hComprimento, "         "); mvprintw(hAltura, hComprimento, "%c", 219); }
+        else if (isPressed && dir == 2) { hAltura --; mvprintw(hAltura+1, hComprimento, "         "); mvprintw(hAltura, hComprimento, "%c", 219);}
+        else if (isPressed && dir == 3) { hComprimento ++; mvprintw(hAltura, hComprimento-1, "         "); mvprintw(hAltura, hComprimento, "%c", 219);}
+        else if (isPressed && dir == 4) { hComprimento --; mvprintw(hAltura, hComprimento+1, "         "); mvprintw(hAltura, hComprimento, "%c",219);}
         refresh();
 
-
-        napms(800);
+        if (score == 0 && cont == 0){ premioX = rand()%altura; premioY = rand()%comprimento; cont ++;}
+        else if (hAltura==premioX && hComprimento==premioY) { score ++; premioX = rand()%altura; premioY = rand()%comprimento; }
+        mvprintw(premioX, premioY, "p");
+        napms(400);
+        mvprintw(0, 0, "%d", score);
     }
     
-
+    mvprintw(10, 10, "%d", score);
     getch();
     endwin();
     return 0;
