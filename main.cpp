@@ -23,6 +23,7 @@ int main() {
     int premioX, premioY;
     int score=0, cont=0;
     int snakelen=5;
+    int i;
 
     list <pair<int, int>> snakePosi;
     snakePosi.push_back(make_pair(hAltura,hComprimento));
@@ -62,6 +63,7 @@ int main() {
             mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 219); 
             itSnakePosi++;
             }
+
         }
         else if (isPressed && dir == 3) { 
             hComprimento ++;  
@@ -69,6 +71,7 @@ int main() {
             mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 219); 
             itSnakePosi++;
             }
+
         }
         else if (isPressed && dir == 4) { 
             hComprimento --;  
@@ -78,7 +81,7 @@ int main() {
             }
         }
         
-        //itSnakePosi = snakePosi.begin();
+        itSnakePosi = snakePosi.begin();
         itSnakePosi->first=hAltura; itSnakePosi->second=hComprimento;
 
 
@@ -89,11 +92,13 @@ int main() {
         napms(150);
         mvprintw(0, 0, "%d", score); // mostra o score
         
-
-
+        mvprintw(0, (comprimento/2), "%d - %d", itSnakePosi->first, itSnakePosi->second);
+        
         snakePosi.push_front(make_pair(hAltura, hComprimento));
         itSnakePosi = snakePosi.begin();
-        mvprintw(0, (comprimento/2), "%d - %d", itSnakePosi->first, itSnakePosi->second);
+        i=0;
+        //mvprintw(itSnakePosi->first, itSnakePosi->second, " ");
+
         snakePosi.pop_back();
 
     }
