@@ -4,7 +4,13 @@
 #include <utility> // para usar a função pair que armazena a localização de cada parte da cobra
 #include <list> // list permite uma rapida movimentação no primeiro e último termo
 
+
+// verificar colisão com o próprio corpo. 
+// apagar o anterior do corpo ao invés de apagar todo o mapa
+// condição para vencer
+
 using namespace std;
+
 
 int main() {
 
@@ -22,7 +28,7 @@ int main() {
     int dir;
     int premioX, premioY;
     int score=0, cont=0;
-    //int i;
+    int bodyCollision=0;
 
     list <pair<int, int>> snakePosi;
     snakePosi.push_back(make_pair(hAltura,hComprimento));
@@ -44,22 +50,19 @@ int main() {
         else if (mv == 2) {if (dir != 2) {dir = 1;};} // DOWN
         else if (mv == 3) {if (dir != 1) {dir = 2;}} // UP
 
-        // itSnakePosi--;
-        // itSnakeAux--;
-
         // move e apaga o anterior 
         clear();
         if (isPressed && dir == 1) { 
             hAltura++;
             while(itSnakePosi!=snakePosi.end()){
-            mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 219); 
+            mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 'O'); 
             itSnakePosi++;
             }
         }
         else if (isPressed && dir == 2) { 
             hAltura --;  
             while(itSnakePosi!=snakePosi.end()){
-            mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 219); 
+            mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 'O'); 
             itSnakePosi++;
             }
 
@@ -67,7 +70,7 @@ int main() {
         else if (isPressed && dir == 3) { 
             hComprimento ++;  
             while(itSnakePosi!=snakePosi.end()){
-            mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 219); 
+            mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 'O'); 
             itSnakePosi++;
             }
 
@@ -75,23 +78,36 @@ int main() {
         else if (isPressed && dir == 4) { 
             hComprimento --;  
             while(itSnakePosi!=snakePosi.end()){
-            mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 219); 
+            mvprintw(itSnakePosi->first, itSnakePosi->second, "%c", 'O'); 
             itSnakePosi++;
             }
         }
-        
         
         itSnakePosi->first=hAltura; itSnakePosi->second=hComprimento;
         itSnakePosi = snakePosi.begin();
 
         //define o local onde o jogador tem que ir para ganhar pontos
         if (cont == 0){ premioX = rand()%altura; premioY = rand()%comprimento; cont ++;}
-        else if (itSnakePosi->first==premioX && itSnakePosi->second==premioY) { score ++; premioX = rand()%altura; premioY = rand()%comprimento; snakePosi.push_back(make_pair(hAltura+1,hComprimento+1)); if(score == 3) { } }
+        else if (itSnakePosi->first==premioX && itSnakePosi->second==premioY) { 
+            score ++; 
+            do{
+            bodyCollision=0;
+            premioX = rand()%altura; premioY = rand()%comprimento;
+            while(itSnakePosi!=snakePosi.end()){
+                if(itSnakePosi->first==premioX && itSnakePosi->second==premioY){
+                    bodyCollision++;
+                }
+                itSnakePosi++;
+            }   
+            }while(bodyCollision>0);
+            snakePosi.push_back(make_pair(hAltura+1,hComprimento+1)); 
+        }
+
         mvprintw(premioX, premioY, "O");
         napms(150);
         mvprintw(0, 0, "%d", score); // mostra o score
         
-        mvprintw(0, (comprimento/2), "%d - %d", itSnakePosi->first, itSnakePosi->second);
+        mvprintw(0, (comprimento/2), "%d - %d", itSnakePosi->first, itSnakePosi->second); //mostra a posição da cabeça
         
         snakePosi.push_front(make_pair(hAltura, hComprimento));
         itSnakePosi = snakePosi.begin();
