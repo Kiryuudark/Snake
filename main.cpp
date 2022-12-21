@@ -111,7 +111,6 @@ int main() {
         
         snakePosi.push_front(make_pair(hAltura, hComprimento));
         itSnakePosi = snakePosi.begin();
-        //mvprintw(itSnakePosi->first, itSnakePosi->second, " ");
 
         snakePosi.pop_back();
 
