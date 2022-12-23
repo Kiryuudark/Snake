@@ -5,9 +5,11 @@
 #include <list> // list permite uma rapida movimentação no primeiro e último termo
 
 
-// verificar colisão com o próprio corpo. 
+// verificar colisão com o próprio corpo. FEITO
 // apagar o anterior do corpo ao invés de apagar todo o mapa
-// condição para vencer
+// condição para vencer -> Score = ?
+// Otimizar o código
+
 
 using namespace std;
 
@@ -29,10 +31,11 @@ int main() {
     int premioX, premioY;
     int score=0, cont=0;
     int bodyCollision=0;
+    int collision=0;
 
     list <pair<int, int>> snakePosi;
     snakePosi.push_back(make_pair(hAltura,hComprimento));
-    list<pair<int, int>>::iterator itSnakePosi = snakePosi.end(), itSnakeAux = snakePosi.end();
+    list<pair<int, int>>::iterator itSnakePosi = snakePosi.end();
     int aux;
 
     //using keypad is possible get direcional keys
@@ -85,6 +88,19 @@ int main() {
         
         itSnakePosi->first=hAltura; itSnakePosi->second=hComprimento;
         itSnakePosi = snakePosi.begin();
+        collision=0;
+
+
+        while(itSnakePosi!=snakePosi.end()){
+            if (itSnakePosi->first == hAltura && itSnakePosi->second == hComprimento && score!=0)
+                collision++;
+            if(collision == 1)
+                return 0;
+            itSnakePosi++;
+        }
+
+        itSnakePosi->first=hAltura; itSnakePosi->second=hComprimento;
+        itSnakePosi = snakePosi.begin();
 
         //define o local onde o jogador tem que ir para ganhar pontos
         if (cont == 0){ premioX = rand()%altura; premioY = rand()%comprimento; cont ++;}
@@ -101,13 +117,14 @@ int main() {
             }   
             }while(bodyCollision>0);
             snakePosi.push_back(make_pair(hAltura+1,hComprimento+1)); 
+            
         }
 
         mvprintw(premioX, premioY, "O");
         napms(150);
         mvprintw(0, 0, "%d", score); // mostra o score
         
-        mvprintw(0, (comprimento/2), "%d - %d", itSnakePosi->first, itSnakePosi->second); //mostra a posição da cabeça
+        mvprintw(0, (comprimento/2), "%d", collision); //mostra a posição da cabeça
         
         snakePosi.push_front(make_pair(hAltura, hComprimento));
         itSnakePosi = snakePosi.begin();
